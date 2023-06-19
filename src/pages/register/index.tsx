@@ -1,11 +1,7 @@
 import CustomBtn from "@/components/CustomBtn";
 import CustomInput from "@/components/CustomInput";
 import GuestLayout from "@/components/GuestLayout";
-import { NECTTA_ADMIN_USER } from "@/constants";
-import { encrypto } from "@/helpers/encryption";
-import { useAppDispatch } from "@/hooks/reduxHooks";
-import { useLoginUserMutation } from "@/redux/api/account.api.slice";
-import { setUser } from "@/redux/auth.slice";
+import { useRegisterUserMutation } from "@/redux/api/account.api.slice";
 import { loginSchema } from "@/validation/account.validation";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { Link } from "@chakra-ui/next-js";
@@ -14,6 +10,7 @@ import { FormikHelpers, useFormik } from "formik";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 interface IFormValues {
   email: string;
@@ -28,28 +25,21 @@ const initialValues: IFormValues = {
 const LoginPage: NextPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
-  const dispatch = useAppDispatch();
 
-  const [loginUser, { isLoading, isError }] = useLoginUserMutation();
+  const [registerUser, { isLoading, isError }] = useRegisterUserMutation();
 
-  const handleLoginUser = async (values: IFormValues, actions: FormikHelpers<IFormValues>) => {
+  const handleRegisterUser = async (values: IFormValues, actions: FormikHelpers<IFormValues>) => {
     try {
-      const res = await loginUser(values).unwrap();
-      const encryptedUserData = encrypto(res);
-      if (encryptedUserData) {
-        dispatch(setUser(encryptedUserData));
-        localStorage.setItem(NECTTA_ADMIN_USER, encryptedUserData);
-      } else {
-        dispatch(setUser(null));
-      }
-      router.push("/dashboard");
+      await registerUser(values).unwrap();
+      toast.success("Registration successful");
+      router.push("/login");
     } catch (error) {}
   };
 
   const { values, errors, touched, handleChange, handleBlur, handleSubmit } = useFormik({
     initialValues,
     validationSchema: loginSchema,
-    onSubmit: handleLoginUser,
+    onSubmit: handleRegisterUser,
   });
 
   return (
@@ -68,7 +58,7 @@ const LoginPage: NextPage = () => {
             Nectta Admin Portal
           </Heading>
           <Text textAlign="center" fontSize={["1rem", "1.2rem"]}>
-            Login to gain access to your dashboard
+            Register user
           </Text>
 
           <form onSubmit={handleSubmit}>
@@ -125,7 +115,7 @@ const LoginPage: NextPage = () => {
 
             <Box mt={[8, 10]}>
               <CustomBtn type="submit" isLoading={isLoading} isError={isError}>
-                Login
+                Register
               </CustomBtn>
             </Box>
           </form>

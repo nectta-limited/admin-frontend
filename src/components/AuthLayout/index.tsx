@@ -20,7 +20,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import Head from "next/head";
-import React, { PropsWithChildren, useRef, useState } from "react";
+import React, { PropsWithChildren, useEffect, useRef, useState } from "react";
 import { AiOutlineBell } from "react-icons/ai";
 import { FaUserCircle } from "react-icons/fa";
 import { BiBarChartAlt2, BiBusSchool, BiLogOut } from "react-icons/bi";
@@ -31,6 +31,10 @@ import useMediaQuery from "@/hooks/useMediaQuery";
 import { Link } from "@chakra-ui/next-js";
 import { useRouter } from "next/router";
 import SidebarLink from "../SidebarLink";
+import { useAppDispatch, useAppSelector, useGetUser } from "@/hooks/reduxHooks";
+import { NECTTA_ADMIN_USER } from "@/constants";
+import { setUser } from "@/redux/auth.slice";
+import LogoutModal from "../LogoutModal";
 
 const NAV_LINKS = [
   { name: "Dashboard", icon: (props?: IconProps) => <Icon as={BiBarChartAlt2} {...props} /> },
@@ -45,7 +49,12 @@ const AuthLayout: React.FC<PropsWithChildren> = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { pathname } = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: isOpenLogout, onOpen: onOpenLogout, onClose: onCloseLogout } = useDisclosure();
   const hamburgerBtnRef = useRef(null);
+  const user = useAppSelector((state) => state.auth.user);
+  const userData = useGetUser();
+  const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const openMenu = () => {
     setIsMenuOpen(true);
@@ -55,12 +64,23 @@ const AuthLayout: React.FC<PropsWithChildren> = ({ children }) => {
     setIsMenuOpen(false);
   };
 
+  useEffect(() => {
+    if (user) return;
+    const browserUser = localStorage?.getItem(NECTTA_ADMIN_USER);
+    if (browserUser) {
+      dispatch(setUser(browserUser));
+      return;
+    }
+    router.replace("/login");
+  }, [user, router, dispatch]);
+
   return (
     <>
       <Head>
         <title>Nectta Admin</title>
       </Head>
       <Box w="full" h="full" minH="100vh" bg="white">
+        <LogoutModal isOpen={isOpenLogout} onClose={onCloseLogout} />
         <Flex
           w="full"
           justify="space-between"
@@ -112,7 +132,7 @@ const AuthLayout: React.FC<PropsWithChildren> = ({ children }) => {
                     fontSize={16}
                     className="appHoverTwo"
                   >
-                    necttaadmin@gmail.com
+                    {userData?.data?.email}
                   </MenuButton>
                 ) : (
                   <MenuButton
@@ -134,13 +154,20 @@ const AuthLayout: React.FC<PropsWithChildren> = ({ children }) => {
                     bg="transparent"
                     className="appHoverTwo"
                     borderBottom={"1px solid #eee"}
+                    onClick={() => router.push("/dashboard/change-password")}
                   >
                     <Icon as={MdLockOutline} color="primary" />
                     <Text ml="2" fontWeight="500">
                       Change Password
                     </Text>
                   </MenuItem>
-                  <MenuItem px={[4, 8]} py="4" bg="transparent" className="appHoverTwo">
+                  <MenuItem
+                    px={[4, 8]}
+                    py="4"
+                    bg="transparent"
+                    className="appHoverTwo"
+                    onClick={onOpenLogout}
+                  >
                     <Icon as={BiLogOut} color="redOne" />
                     <Text ml="2" fontWeight="500" color="redOne">
                       Logout
