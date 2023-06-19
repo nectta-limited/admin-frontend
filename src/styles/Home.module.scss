@@ -1,0 +1,17 @@
+@import "./include-media";
+
+.container {
+  // background-image: url("../../public/images/landing_bg_two.svg"),
+  //   url("../../public/images/landing_bg_one.svg");
+  // background-repeat: no-repeat;
+  // background-size: 40%, initial;
+  // background-position: 60% 80%, 60% 80%;
+  padding: 0.5rem 0;
+
+  @include media("<=1260px") {
+    background-position: 60% 100%, 60% 100%;
+  }
+  @include media("<=1100px") {
+    background-image: none;
+  }
+}
