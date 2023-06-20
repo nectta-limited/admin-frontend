@@ -9,7 +9,7 @@ export const busesApiSlice = necttaAdminApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["Buses"],
+      invalidatesTags: ["Buses", "Profile"],
     }),
     getBuses: builder.query<IGetBusesResponse, IGetBusesRequestParams>({
       query: ({ page, limit }) => ({

@@ -1,4 +1,8 @@
-import { ICreateParentRequest } from "@/types/parents";
+import {
+  ICreateParentRequest,
+  IGetParentsRequestParams,
+  IGetParentsResponse,
+} from "@/types/parents";
 import { necttaAdminApi } from "../api.slice";
 
 export const parentsApiSlice = necttaAdminApi.injectEndpoints({
@@ -9,10 +13,20 @@ export const parentsApiSlice = necttaAdminApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["Parents"],
+      invalidatesTags: ["Parents", "Profile"],
+    }),
+    getDrivers: builder.query<IGetParentsResponse, IGetParentsRequestParams>({
+      query: ({ page, limit }) => ({
+        url: `parent`,
+        params: {
+          page,
+          limit,
+        },
+      }),
+      providesTags: ["Parents"],
     }),
   }),
   overrideExisting: true,
 });
 
-export const { useCreateParentMutation } = parentsApiSlice;
+export const { useCreateParentMutation, useGetDriversQuery } = parentsApiSlice;

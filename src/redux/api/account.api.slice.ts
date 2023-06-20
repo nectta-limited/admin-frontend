@@ -1,6 +1,11 @@
 import { IUser } from "@/types/user";
 import { necttaAdminApi } from "../api.slice";
-import { IChangePasswordRequest, ILoginUserRequest, IRegisterUserResponse } from "@/types/account";
+import {
+  IChangePasswordRequest,
+  IGetDataCountResponse,
+  ILoginUserRequest,
+  IRegisterUserResponse,
+} from "@/types/account";
 
 export const accountApiSlice = necttaAdminApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -25,9 +30,19 @@ export const accountApiSlice = necttaAdminApi.injectEndpoints({
         body: data,
       }),
     }),
+    getDataCount: builder.query<IGetDataCountResponse, void>({
+      query: () => ({
+        url: `total-count`,
+      }),
+      providesTags: ["Profile"],
+    }),
   }),
   overrideExisting: true,
 });
 
-export const { useLoginUserMutation, useRegisterUserMutation, useChangePasswordMutation } =
-  accountApiSlice;
+export const {
+  useLoginUserMutation,
+  useRegisterUserMutation,
+  useChangePasswordMutation,
+  useGetDataCountQuery,
+} = accountApiSlice;

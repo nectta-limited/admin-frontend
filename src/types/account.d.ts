@@ -20,3 +20,12 @@ export interface IChangePasswordRequest {
   oldPassword: string;
   newPassword: string;
 }
+
+export interface IGetDataCountResponse {
+  status: boolean;
+  data: {
+    buses: number;
+    parents: number;
+    drivers: number;
+  };
+}
