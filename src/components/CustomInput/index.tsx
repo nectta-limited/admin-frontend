@@ -61,7 +61,11 @@ const CustomInput = ({
       </Flex>
 
       <InputGroup>
-        {leftEl ? <InputLeftElement height="full">{leftEl}</InputLeftElement> : null}
+        {leftEl ? (
+          <InputLeftElement height="full" pl="4">
+            {leftEl}
+          </InputLeftElement>
+        ) : null}
         {box ? (
           <Textarea
             border={"1px solid #c4c4c4"}
@@ -85,8 +89,8 @@ const CustomInput = ({
           <Input
             border={"1px solid #c4c4c4"}
             borderRadius="5px"
-            pr={rightEl ? 20 : 4}
-            pl={leftEl ? 20 : 4}
+            pr={rightEl ? 12 : 4}
+            pl={leftEl ? 12 : 4}
             color="blackThree"
             w="full"
             fontSize="0.875rem"

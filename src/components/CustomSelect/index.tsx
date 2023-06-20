@@ -66,6 +66,7 @@ const CustomSelect = ({
           container: (provided) => ({
             ...provided,
             width: "100%",
+            fontFamily: `'Kanit', sans-serif`,
           }),
           control: (provided, { isDisabled }) => ({
             ...provided,
@@ -75,11 +76,17 @@ const CustomSelect = ({
             fontSize: "0.875rem",
             background: isDisabled ? "#F9F9FB" : "white",
             border: "1px solid #c4c4c4",
+            fontFamily: `'Kanit', sans-serif`,
           }),
           placeholder: (provided) => ({
             ...provided,
             fontFamily: `'Kanit', sans-serif`,
-            color: "#D0CACA",
+            color: "black",
+          }),
+          option: (provided) => ({
+            ...provided,
+            color: "black",
+            fontFamily: `'Kanit', sans-serif`,
           }),
         }}
       />
