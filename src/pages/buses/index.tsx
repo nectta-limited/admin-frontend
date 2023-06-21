@@ -1,57 +1,59 @@
 import AuthLayout from "@/components/AuthLayout";
 import CustomBtn from "@/components/CustomBtn";
 import CustomReactTable from "@/components/CustomReactTable";
+import StatusText from "@/components/StatusText";
+import BusTableActionButton from "@/pages/buses/components/BusTableActionButton";
 import { useGetBusesQuery } from "@/redux/api/buses.api.slice";
 import { IBus } from "@/types/buses";
 import { Box, Flex, Heading } from "@chakra-ui/react";
-import { Column, createColumnHelper } from "@tanstack/react-table";
+import { createColumnHelper } from "@tanstack/react-table";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import React from "react";
 
 const columnHelper = createColumnHelper<IBus>();
 
-const columns = [
-  columnHelper.accessor((row) => row.id, {
-    id: "id",
-    cell: (info) => <>{info.getValue()}</>,
-    header: () => <>#</>,
-  }),
-  columnHelper.accessor((row) => row.busNumber, {
-    id: "busNumber",
-    cell: (info) => <>{info.getValue()}</>,
-    header: () => <>Bus Number</>,
-  }),
-  columnHelper.accessor((row) => row.busType, {
-    id: "busType",
-    cell: (info) => <>{info.getValue()}</>,
-    header: () => <>Bus Type</>,
-  }),
-  columnHelper.accessor((row) => row.driver, {
-    id: "driver",
-    cell: (info) => <>{info.getValue()}</>,
-    header: () => <>Driver</>,
-  }),
-  columnHelper.accessor((row) => row.numStudents, {
-    id: "numStudents",
-    cell: (info) => <>{info.getValue()}</>,
-    header: () => <>No. Of Students</>,
-  }),
-  columnHelper.accessor((row) => row.status, {
-    id: "status",
-    cell: (info) => <>{info.getValue()}</>,
-    header: () => <>Status</>,
-  }),
-  columnHelper.accessor((row) => row.id, {
-    id: "busId",
-    cell: (info) => <>Actions</>,
-    header: () => <></>,
-  }),
-];
-
 const BusesPage: NextPage = () => {
   const router = useRouter();
   const { data, isLoading } = useGetBusesQuery({});
+
+  const columns = [
+    columnHelper.accessor((row) => row.id, {
+      id: "id",
+      cell: (info) => <>{info.getValue()}</>,
+      header: () => <>#</>,
+    }),
+    columnHelper.accessor((row) => row.busNumber, {
+      id: "busNumber",
+      cell: (info) => <>{info.getValue()}</>,
+      header: () => <>Bus Number</>,
+    }),
+    columnHelper.accessor((row) => row.busType, {
+      id: "busType",
+      cell: (info) => <>{info.getValue()}</>,
+      header: () => <>Bus Type</>,
+    }),
+    columnHelper.accessor((row) => row.driver, {
+      id: "driver",
+      cell: (info) => <>{info.getValue() || "-"}</>,
+      header: () => <>Driver</>,
+    }),
+    columnHelper.accessor((row) => row.numStudents, {
+      id: "numStudents",
+      cell: (info) => <>{info.getValue()}</>,
+      header: () => <>No. Of Students</>,
+    }),
+    columnHelper.accessor((row) => row.status, {
+      id: "status",
+      cell: (info) => <StatusText status={info.getValue()} />,
+      header: () => <>Status</>,
+    }),
+    columnHelper.accessor((row) => row.id, {
+      id: "busId",
+      cell: (info) => <BusTableActionButton />,
+      header: () => <></>,
+    }),
+  ];
 
   return (
     <AuthLayout>

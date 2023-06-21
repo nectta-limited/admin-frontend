@@ -15,6 +15,7 @@ const colors = {
   greyTwo: "#D0CACA",
   greyThree: "#E0E0E0",
   redOne: "#FF002A",
+  greenOne: "#058D00",
   orangeOne: "#FCE9CF",
   orangeTwo: "#F5AE51",
   whiteOne: "#ffffff",

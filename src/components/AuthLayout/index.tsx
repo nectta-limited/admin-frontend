@@ -79,7 +79,7 @@ const AuthLayout: React.FC<PropsWithChildren> = ({ children }) => {
       <Head>
         <title>Nectta Admin</title>
       </Head>
-      <Box w="full" h="full" minH="100vh" bg="white">
+      <Box w="full" maxW="100vw" h="full" minH="100vh" bg="white">
         <LogoutModal isOpen={isOpenLogout} onClose={onCloseLogout} />
         <Flex
           w="full"
@@ -194,7 +194,7 @@ const AuthLayout: React.FC<PropsWithChildren> = ({ children }) => {
             </Box>
           ) : null}
 
-          <Box bg="pageBG" h="full" w="full" pt={[4, 6, 8]} px={[4, 6, 8]}>
+          <Box bg="pageBG" h="full" w="full" maxW="full" pt={[4, 6, 8]} px={[4, 6, 8]}>
             {children}
           </Box>
         </Grid>

@@ -15,7 +15,7 @@ export const parentsApiSlice = necttaAdminApi.injectEndpoints({
       }),
       invalidatesTags: ["Parents", "Profile"],
     }),
-    getDrivers: builder.query<IGetParentsResponse, IGetParentsRequestParams>({
+    getParents: builder.query<IGetParentsResponse, IGetParentsRequestParams>({
       query: ({ page = 1, limit }) => ({
         url: `parent?page=${page}&limit=${limit}`,
       }),
@@ -25,4 +25,4 @@ export const parentsApiSlice = necttaAdminApi.injectEndpoints({
   overrideExisting: true,
 });
 
-export const { useCreateParentMutation, useGetDriversQuery } = parentsApiSlice;
+export const { useCreateParentMutation, useGetParentsQuery } = parentsApiSlice;

@@ -154,8 +154,8 @@ const CustomReactTable = ({
         </Flex>
       </Flex>
 
-      <Box mt={title ? [6, 8, 10] : search ? 3 : 0}>
-        <Box overflowX="scroll" className={styles.container}>
+      <Box mt={title ? [6, 8, 10] : search ? 3 : 0} maxW="full" w="full">
+        <Box className={styles.container} overflowX="scroll" maxW="full" w="full">
           {isLoading ? (
             <Center py="8">
               <Spinner size="xl" />
