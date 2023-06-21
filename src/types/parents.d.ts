@@ -8,7 +8,7 @@ export interface ICreateParentRequest {
 }
 
 export interface IUpdateParentRequest {
-  id: string | number;
+  id: number;
   body: ICreateParentRequest;
 }
 

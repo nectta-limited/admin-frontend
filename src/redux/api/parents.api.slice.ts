@@ -30,7 +30,7 @@ export const parentsApiSlice = necttaAdminApi.injectEndpoints({
       }),
       providesTags: ["Parents"],
     }),
-    deleteParent: builder.mutation<unknown, string>({
+    deleteParent: builder.mutation<unknown, number>({
       query: (id) => ({
         url: `parent/${id}`,
         method: "DELETE",
@@ -41,5 +41,9 @@ export const parentsApiSlice = necttaAdminApi.injectEndpoints({
   overrideExisting: true,
 });
 
-export const { useCreateParentMutation, useGetParentsQuery, useDeleteParentMutation } =
-  parentsApiSlice;
+export const {
+  useCreateParentMutation,
+  useGetParentsQuery,
+  useDeleteParentMutation,
+  useUpdateParentMutation,
+} = parentsApiSlice;

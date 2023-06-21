@@ -25,26 +25,26 @@ export const busesApiSlice = necttaAdminApi.injectEndpoints({
       invalidatesTags: ["Buses", "Profile"],
     }),
     getBuses: builder.query<IGetBusesResponse, IGetBusesRequestParams>({
-      query: ({ page = 1, limit = 2 }) => ({
+      query: ({ page = 1, limit = 10 }) => ({
         url: `bus?page=${page}&limit=${limit}`,
       }),
       providesTags: ["Buses"],
     }),
-    deleteBus: builder.mutation<unknown, string>({
+    deleteBus: builder.mutation<unknown, number>({
       query: (id) => ({
         url: `bus/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Buses", "Profile"],
     }),
-    deactivateBus: builder.mutation<unknown, string>({
+    deactivateBus: builder.mutation<unknown, number>({
       query: (id) => ({
         url: `bus/${id}/deactivate`,
         method: "PUT",
       }),
       invalidatesTags: ["Buses", "Profile"],
     }),
-    activateBus: builder.mutation<unknown, string>({
+    activateBus: builder.mutation<unknown, number>({
       query: (id) => ({
         url: `bus/${id}/activate`,
         method: "PUT",

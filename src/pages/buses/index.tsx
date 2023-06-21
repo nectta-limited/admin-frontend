@@ -1,21 +1,42 @@
 import AuthLayout from "@/components/AuthLayout";
 import CustomBtn from "@/components/CustomBtn";
 import CustomReactTable from "@/components/CustomReactTable";
+import DeactivateModal from "@/components/DeactivateModal";
+import DeleteModal from "@/components/DeleteModal";
 import StatusText from "@/components/StatusText";
 import BusTableActionButton from "@/pages/buses/components/BusTableActionButton";
 import { useGetBusesQuery } from "@/redux/api/buses.api.slice";
 import { IBus } from "@/types/buses";
-import { Box, Flex, Heading } from "@chakra-ui/react";
+import { Box, Flex, Heading, useDisclosure } from "@chakra-ui/react";
 import { createColumnHelper } from "@tanstack/react-table";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 
 const columnHelper = createColumnHelper<IBus>();
 
 const BusesPage: NextPage = () => {
   const router = useRouter();
   const { data, isLoading } = useGetBusesQuery({});
+  const [selectedId, setSelectedId] = useState<number>();
+  const [isBusActive, setIsBusActive] = useState<boolean>();
+  const {
+    isOpen: isOpenDeactivate,
+    onClose: onCloseDeactivate,
+    onOpen: onOpenDeactivate,
+  } = useDisclosure();
+  const { isOpen: isOpenDelete, onClose: onCloseDelete, onOpen: onOpenDelete } = useDisclosure();
+
+  const handleOpenDeleteModal = (id: number) => {
+    setSelectedId(id);
+    onOpenDelete();
+  };
+
+  const handleOpenDeactivateModal = (id: number, isActive: boolean) => {
+    setSelectedId(id);
+    setIsBusActive(isActive);
+    onOpenDeactivate();
+  };
 
   const columns = [
     columnHelper.accessor((row) => row.id, {
@@ -50,13 +71,29 @@ const BusesPage: NextPage = () => {
     }),
     columnHelper.accessor((row) => row.id, {
       id: "busId",
-      cell: (info) => <BusTableActionButton />,
+      cell: (info) => (
+        <BusTableActionButton
+          id={info.getValue()}
+          deactivateAction={handleOpenDeactivateModal}
+          deleteAction={handleOpenDeleteModal}
+          isActive={info.row.original.status.toLowerCase() === "active"}
+        />
+      ),
       header: () => <></>,
     }),
   ];
 
   return (
     <AuthLayout>
+      <DeactivateModal
+        isOpen={isOpenDeactivate}
+        onClose={onCloseDeactivate}
+        id={selectedId}
+        dataType={"bus"}
+        isActive={isBusActive}
+      />
+      <DeleteModal isOpen={isOpenDelete} onClose={onCloseDelete} id={selectedId} dataType={"bus"} />
+
       <Flex w="full" justify={["space-between"]} align="center">
         <Heading fontSize={[20, 26]} color="blackOne">
           Buses

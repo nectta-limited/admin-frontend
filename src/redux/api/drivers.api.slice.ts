@@ -30,21 +30,21 @@ export const driversApiSlice = necttaAdminApi.injectEndpoints({
       }),
       providesTags: ["Drivers"],
     }),
-    deleteDriver: builder.mutation<unknown, string>({
+    deleteDriver: builder.mutation<unknown, number>({
       query: (id) => ({
         url: `driver/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Drivers", "Profile"],
     }),
-    deactivateDriver: builder.mutation<unknown, string>({
+    deactivateDriver: builder.mutation<unknown, number>({
       query: (id) => ({
         url: `driver/${id}/deactivate`,
         method: "PUT",
       }),
       invalidatesTags: ["Drivers", "Profile"],
     }),
-    activateDriver: builder.mutation<unknown, string>({
+    activateDriver: builder.mutation<unknown, number>({
       query: (id) => ({
         url: `driver/${id}/activate`,
         method: "PUT",

@@ -3,20 +3,41 @@ import CustomBtn from "@/components/CustomBtn";
 import StatusText from "@/components/StatusText";
 import { useGetDriversQuery } from "@/redux/api/drivers.api.slice";
 import { IDriver } from "@/types/drivers";
-import { Box, Flex, Heading } from "@chakra-ui/react";
+import { Box, Flex, Heading, useDisclosure } from "@chakra-ui/react";
 import { createColumnHelper } from "@tanstack/react-table";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 import DriverTableActionButton from "./components/DriverTableActionButton";
 import CustomReactTable from "@/components/CustomReactTable";
 import dayjs from "dayjs";
+import DeactivateModal from "@/components/DeactivateModal";
+import DeleteModal from "@/components/DeleteModal";
 
 const columnHelper = createColumnHelper<IDriver>();
 
 const DriversPage: NextPage = () => {
   const router = useRouter();
   const { data, isLoading } = useGetDriversQuery({});
+  const [selectedId, setSelectedId] = useState<number>();
+  const [isDriverActive, setIsDriverActive] = useState<boolean>();
+  const {
+    isOpen: isOpenDeactivate,
+    onClose: onCloseDeactivate,
+    onOpen: onOpenDeactivate,
+  } = useDisclosure();
+  const { isOpen: isOpenDelete, onClose: onCloseDelete, onOpen: onOpenDelete } = useDisclosure();
+
+  const handleOpenDeleteModal = (id: number) => {
+    setSelectedId(id);
+    onOpenDelete();
+  };
+
+  const handleOpenDeactivateModal = (id: number, isActive: boolean) => {
+    setSelectedId(id);
+    setIsDriverActive(isActive);
+    onOpenDeactivate();
+  };
 
   const columns = [
     columnHelper.accessor((row) => row.id, {
@@ -61,13 +82,34 @@ const DriversPage: NextPage = () => {
     }),
     columnHelper.accessor((row) => row.id, {
       id: "driverIdBtn",
-      cell: (info) => <DriverTableActionButton />,
+      cell: (info) => (
+        <DriverTableActionButton
+          id={info.getValue()}
+          deactivateAction={handleOpenDeactivateModal}
+          deleteAction={handleOpenDeleteModal}
+          isActive={info.row.original.status.toLowerCase() === "active"}
+        />
+      ),
       header: () => <></>,
     }),
   ];
 
   return (
     <AuthLayout>
+      <DeactivateModal
+        isOpen={isOpenDeactivate}
+        onClose={onCloseDeactivate}
+        id={selectedId}
+        dataType={"driver"}
+        isActive={isDriverActive}
+      />
+      <DeleteModal
+        isOpen={isOpenDelete}
+        onClose={onCloseDelete}
+        id={selectedId}
+        dataType={"driver"}
+      />
+
       <Flex w="full" justify={["space-between"]} align="center">
         <Heading fontSize={[20, 26]} color="blackOne">
           Drivers

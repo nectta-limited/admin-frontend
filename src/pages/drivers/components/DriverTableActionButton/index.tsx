@@ -2,7 +2,14 @@ import { TriangleDownIcon } from "@chakra-ui/icons";
 import { Button, Menu, MenuButton, MenuItem, MenuList, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
 
-const DriverTableActionButton = () => {
+interface Props {
+  deleteAction: (id: number) => void;
+  deactivateAction: (id: number, isActive: boolean) => void;
+  id: number;
+  isActive: boolean;
+}
+
+const DriverTableActionButton = ({ deactivateAction, deleteAction, id, isActive }: Props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const openMenu = () => {
@@ -42,7 +49,7 @@ const DriverTableActionButton = () => {
           className="appHoverTwo"
           // onClick={() => router.push("/dashboard/change-password")}
         >
-          <Text>View current bus location</Text>
+          <Text>View current driver location</Text>
         </MenuItem>
         <MenuItem
           px={[4]}
@@ -50,23 +57,23 @@ const DriverTableActionButton = () => {
           className="appHoverTwo"
           // onClick={() => router.push("/dashboard/change-password")}
         >
-          <Text>Edit bus info</Text>
+          <Text>Edit driver info</Text>
         </MenuItem>
         <MenuItem
           px={[4]}
           bg="transparent"
           className="appHoverTwo"
-          // onClick={() => router.push("/dashboard/change-password")}
+          onClick={() => deactivateAction(id, isActive)}
         >
-          <Text>Deactivate bus</Text>
+          <Text>{isActive ? `Deactivate driver` : `Activate driver`}</Text>
         </MenuItem>
         <MenuItem
           px={[4]}
           bg="transparent"
           className="appHoverTwo"
-          // onClick={() => router.push("/dashboard/change-password")}
+          onClick={() => deleteAction(id)}
         >
-          <Text>Delete bus</Text>
+          <Text>Delete driver</Text>
         </MenuItem>
       </MenuList>
     </Menu>

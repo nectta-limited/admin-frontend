@@ -4,19 +4,37 @@ import CustomReactTable from "@/components/CustomReactTable";
 import StatusText from "@/components/StatusText";
 import { useGetParentsQuery } from "@/redux/api/parents.api.slice";
 import { IParent } from "@/types/parents";
-import { Box, Flex, Heading } from "@chakra-ui/react";
+import { Box, Flex, Heading, useDisclosure } from "@chakra-ui/react";
 import { createColumnHelper } from "@tanstack/react-table";
 import dayjs from "dayjs";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 import ParentTableActionButton from "./components/ParentTableActionButton";
+import DeleteModal from "@/components/DeleteModal";
 
 const columnHelper = createColumnHelper<IParent>();
 
 const ParentsPage: NextPage = () => {
   const router = useRouter();
   const { data, isLoading } = useGetParentsQuery({});
+  const [selectedId, setSelectedId] = useState<number>();
+  const {
+    isOpen: isOpenDeactivate,
+    onClose: onCloseDeactivate,
+    onOpen: onOpenDeactivate,
+  } = useDisclosure();
+  const { isOpen: isOpenDelete, onClose: onCloseDelete, onOpen: onOpenDelete } = useDisclosure();
+
+  const handleOpenDeleteModal = (id: number) => {
+    setSelectedId(id);
+    onOpenDelete();
+  };
+
+  const handleOpenDeactivateModal = (id: number) => {
+    setSelectedId(id);
+    onOpenDeactivate();
+  };
 
   const columns = [
     columnHelper.accessor((row) => row.id, {
@@ -61,13 +79,22 @@ const ParentsPage: NextPage = () => {
     }),
     columnHelper.accessor((row) => row.id, {
       id: "parentIdBtn",
-      cell: (info) => <ParentTableActionButton />,
+      cell: (info) => (
+        <ParentTableActionButton id={info.getValue()} deleteAction={handleOpenDeleteModal} />
+      ),
       header: () => <></>,
     }),
   ];
 
   return (
     <AuthLayout>
+      <DeleteModal
+        isOpen={isOpenDelete}
+        onClose={onCloseDelete}
+        id={selectedId}
+        dataType={"parent"}
+      />
+
       <Flex w="full" justify={["space-between"]} align="center">
         <Heading fontSize={[20, 26]} color="blackOne">
           Parents

@@ -6,7 +6,7 @@ export interface ICreateDriverRequest {
 }
 
 export interface IUpdateDriverRequest {
-  id: string | number;
+  id: number;
   body: ICreateDriverRequest;
 }
 

@@ -2,7 +2,12 @@ import { TriangleDownIcon } from "@chakra-ui/icons";
 import { Button, Menu, MenuButton, MenuItem, MenuList, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
 
-const ParentTableActionButton = () => {
+interface Props {
+  deleteAction: (id: number) => void;
+  id: number;
+}
+
+const ParentTableActionButton = ({ deleteAction, id }: Props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const openMenu = () => {
@@ -42,7 +47,7 @@ const ParentTableActionButton = () => {
           className="appHoverTwo"
           // onClick={() => router.push("/dashboard/change-password")}
         >
-          <Text>View current bus location</Text>
+          <Text>View current parent location</Text>
         </MenuItem>
         <MenuItem
           px={[4]}
@@ -50,23 +55,15 @@ const ParentTableActionButton = () => {
           className="appHoverTwo"
           // onClick={() => router.push("/dashboard/change-password")}
         >
-          <Text>Edit bus info</Text>
+          <Text>Edit parent info</Text>
         </MenuItem>
         <MenuItem
           px={[4]}
           bg="transparent"
           className="appHoverTwo"
-          // onClick={() => router.push("/dashboard/change-password")}
+          onClick={() => deleteAction(id)}
         >
-          <Text>Deactivate bus</Text>
-        </MenuItem>
-        <MenuItem
-          px={[4]}
-          bg="transparent"
-          className="appHoverTwo"
-          // onClick={() => router.push("/dashboard/change-password")}
-        >
-          <Text>Delete bus</Text>
+          <Text>Delete parent</Text>
         </MenuItem>
       </MenuList>
     </Menu>

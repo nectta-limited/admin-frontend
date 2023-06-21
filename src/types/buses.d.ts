@@ -5,7 +5,7 @@ export interface ICreateBusRequest {
 }
 
 export interface IUpdateBusRequest {
-  id: string | number;
+  id: number;
   body: ICreateBusRequest;
 }
 
