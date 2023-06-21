@@ -16,12 +16,8 @@ export const driversApiSlice = necttaAdminApi.injectEndpoints({
       invalidatesTags: ["Drivers", "Profile"],
     }),
     getDrivers: builder.query<IGetDriversResponse, IGetDriversRequestParams>({
-      query: ({ page, limit }) => ({
-        url: `driver`,
-        params: {
-          page,
-          limit,
-        },
+      query: ({ page = 1, limit }) => ({
+        url: `driver?page=${page}&limit=${limit}`,
       }),
       providesTags: ["Drivers"],
     }),

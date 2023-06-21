@@ -1,5 +1,5 @@
 import AuthLayout from "@/components/AuthLayout";
-import { Box, Center, Grid, Heading, Spinner } from "@chakra-ui/react";
+import { Grid, Heading } from "@chakra-ui/react";
 import { NextPage } from "next";
 import React from "react";
 import DataBox from "./components/DataBox";

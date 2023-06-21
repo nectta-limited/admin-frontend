@@ -12,12 +12,8 @@ export const busesApiSlice = necttaAdminApi.injectEndpoints({
       invalidatesTags: ["Buses", "Profile"],
     }),
     getBuses: builder.query<IGetBusesResponse, IGetBusesRequestParams>({
-      query: ({ page, limit }) => ({
-        url: `bus`,
-        params: {
-          page,
-          limit,
-        },
+      query: ({ page = 1, limit = 2 }) => ({
+        url: `bus?page=${page}&limit=${limit}`,
       }),
       providesTags: ["Buses"],
     }),

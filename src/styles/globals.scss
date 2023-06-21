@@ -24,6 +24,24 @@ a {
   box-sizing: border-box;
 }
 
+.searchInput {
+  border: 1px solid #e0e0e0;
+  background: white;
+  border-radius: 3px;
+  padding: 0.25rem 0.5rem;
+  color: black;
+  font-size: 0.875rem;
+  font-family: "Kanit", sans-serif;
+
+  &:focus {
+    outline: 1px solid #e0e0e0;
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
 .appHover {
   transition: all 0.2s ease-in-out;
 
