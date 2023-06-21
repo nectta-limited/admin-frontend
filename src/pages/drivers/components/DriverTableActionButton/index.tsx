@@ -44,33 +44,51 @@ const DriverTableActionButton = ({ deactivateAction, deleteAction, id, isActive 
       </MenuButton>
       <MenuList bg="white">
         <MenuItem
-          px={[4]}
+          px="4"
+          py="2"
           bg="transparent"
           className="appHoverTwo"
+          justifyContent="center"
           // onClick={() => router.push("/dashboard/change-password")}
         >
-          <Text>View current driver location</Text>
+          <Text>View more info</Text>
         </MenuItem>
         <MenuItem
-          px={[4]}
+          px="4"
+          py="2"
           bg="transparent"
           className="appHoverTwo"
+          justifyContent="center"
+          // onClick={() => router.push("/dashboard/change-password")}
+        >
+          <Text>View location</Text>
+        </MenuItem>
+        <MenuItem
+          px="4"
+          py="2"
+          bg="transparent"
+          className="appHoverTwo"
+          justifyContent="center"
           // onClick={() => router.push("/dashboard/change-password")}
         >
           <Text>Edit driver info</Text>
         </MenuItem>
         <MenuItem
-          px={[4]}
+          px="4"
+          py="2"
           bg="transparent"
           className="appHoverTwo"
+          justifyContent="center"
           onClick={() => deactivateAction(id, isActive)}
         >
           <Text>{isActive ? `Deactivate driver` : `Activate driver`}</Text>
         </MenuItem>
         <MenuItem
-          px={[4]}
+          px="4"
+          py="2"
           bg="transparent"
           className="appHoverTwo"
+          justifyContent="center"
           onClick={() => deleteAction(id)}
         >
           <Text>Delete driver</Text>

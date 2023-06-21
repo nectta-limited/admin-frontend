@@ -45,6 +45,7 @@ const ParentTableActionButton = ({ deleteAction, id }: Props) => {
           px={[4]}
           bg="transparent"
           className="appHoverTwo"
+          justifyContent="center"
           // onClick={() => router.push("/dashboard/change-password")}
         >
           <Text>View current parent location</Text>
@@ -53,6 +54,7 @@ const ParentTableActionButton = ({ deleteAction, id }: Props) => {
           px={[4]}
           bg="transparent"
           className="appHoverTwo"
+          justifyContent="center"
           // onClick={() => router.push("/dashboard/change-password")}
         >
           <Text>Edit parent info</Text>
@@ -61,6 +63,7 @@ const ParentTableActionButton = ({ deleteAction, id }: Props) => {
           px={[4]}
           bg="transparent"
           className="appHoverTwo"
+          justifyContent="center"
           onClick={() => deleteAction(id)}
         >
           <Text>Delete parent</Text>

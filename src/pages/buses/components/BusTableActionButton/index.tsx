@@ -44,33 +44,41 @@ const BusTableActionButton = ({ deactivateAction, deleteAction, id, isActive }: 
       </MenuButton>
       <MenuList bg="white">
         <MenuItem
-          px={[4]}
+          px="4"
+          py="2"
           bg="transparent"
           className="appHoverTwo"
+          justifyContent="center"
           // onClick={() => router.push("/dashboard/change-password")}
         >
           <Text>View current bus location</Text>
         </MenuItem>
         <MenuItem
-          px={[4]}
+          px="4"
+          py="2"
           bg="transparent"
           className="appHoverTwo"
+          justifyContent="center"
           // onClick={() => router.push("/dashboard/change-password")}
         >
           <Text>Edit bus info</Text>
         </MenuItem>
         <MenuItem
-          px={[4]}
+          px="4"
+          py="2"
           bg="transparent"
           className="appHoverTwo"
+          justifyContent="center"
           onClick={() => deactivateAction(id, isActive)}
         >
           <Text>{isActive ? `Deactivate bus` : `Activate bus`}</Text>
         </MenuItem>
         <MenuItem
-          px={[4]}
+          px="4"
+          py="2"
           bg="transparent"
           className="appHoverTwo"
+          justifyContent="center"
           onClick={() => deleteAction(id)}
         >
           <Text>Delete bus</Text>
