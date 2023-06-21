@@ -5,6 +5,11 @@ export interface ICreateDriverRequest {
   busNumber: string;
 }
 
+export interface IUpdateDriverRequest {
+  id: string | number;
+  body: ICreateDriverRequest;
+}
+
 export interface IDriver {
   id: number;
   driverId: string;

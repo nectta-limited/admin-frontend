@@ -4,6 +4,11 @@ export interface ICreateBusRequest {
   busColor: string;
 }
 
+export interface IUpdateBusRequest {
+  id: string | number;
+  body: ICreateBusRequest;
+}
+
 export interface IBus {
   id: number;
   busNumber: string;

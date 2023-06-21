@@ -7,6 +7,11 @@ export interface ICreateParentRequest {
   busNumber: string;
 }
 
+export interface IUpdateParentRequest {
+  id: string | number;
+  body: ICreateParentRequest;
+}
+
 export interface IWard {
   name: string;
   grade: string;
