@@ -8,7 +8,7 @@ import BusTableActionButton from "@/pages/buses/components/BusTableActionButton"
 import { useGetBusesQuery } from "@/redux/api/buses.api.slice";
 import { IBus } from "@/types/buses";
 import { Box, Flex, Heading, useDisclosure } from "@chakra-ui/react";
-import { createColumnHelper } from "@tanstack/react-table";
+import { PaginationState, createColumnHelper } from "@tanstack/react-table";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
@@ -17,9 +17,21 @@ const columnHelper = createColumnHelper<IBus>();
 
 const BusesPage: NextPage = () => {
   const router = useRouter();
-  const { data, isLoading } = useGetBusesQuery({});
   const [selectedId, setSelectedId] = useState<number>();
   const [isBusActive, setIsBusActive] = useState<boolean>();
+  const [{ pageIndex, pageSize }, setPagination] = React.useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 1,
+  });
+  const { data, isLoading, isFetching } = useGetBusesQuery({
+    page: pageIndex + 1,
+    limit: pageSize,
+  });
+  const {
+    data: totalData,
+    isLoading: isLoadingTotal,
+    isFetching: isFetchingTotal,
+  } = useGetBusesQuery({});
   const {
     isOpen: isOpenDeactivate,
     onClose: onCloseDeactivate,
@@ -37,6 +49,14 @@ const BusesPage: NextPage = () => {
     setIsBusActive(isActive);
     onOpenDeactivate();
   };
+
+  const pagination = React.useMemo(
+    () => ({
+      pageIndex,
+      pageSize,
+    }),
+    [pageIndex, pageSize]
+  );
 
   const columns = [
     columnHelper.accessor((row) => row.id, {
@@ -111,6 +131,11 @@ const BusesPage: NextPage = () => {
           plural="Buses"
           singular="Bus"
           isLoading={isLoading}
+          totalCount={totalData?.data?.length ?? 0}
+          pageIndex={pageIndex}
+          pageSize={pageSize}
+          setPagination={setPagination}
+          pagination={pagination}
         />
       </Box>
     </AuthLayout>

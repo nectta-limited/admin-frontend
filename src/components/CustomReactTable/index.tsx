@@ -1,6 +1,7 @@
 import React, { ReactNode, useState } from "react";
 import {
   FilterFn,
+  PaginationState,
   SortingState,
   flexRender,
   getCoreRowModel,
@@ -11,13 +12,17 @@ import {
 import { RankingInfo, rankItem, compareItems } from "@tanstack/match-sorter-utils";
 import {
   Box,
+  Button,
   Center,
   Flex,
+  Grid,
+  Select,
   Spinner,
   Table,
   Tbody,
   Td,
   Text,
+  Tfoot,
   Th,
   Thead,
   Tr,
@@ -35,6 +40,14 @@ type Props = {
   plural: string;
   singular: string;
   link?: string;
+
+  totalCount: number;
+
+  pageSize: number;
+  pageIndex: number;
+  setPagination: React.Dispatch<React.SetStateAction<PaginationState>>;
+  pagination: PaginationState;
+
   // rowClickAction?: (val: any) => void;
   // searchPlaceholder?: string;
   // handleSetDateRange?: (val: string) => void;
@@ -81,10 +94,17 @@ const CustomReactTable = ({
   plural,
   singular,
   link,
+  totalCount,
+  pageIndex,
+  pageSize,
+  setPagination,
+  pagination,
 }: Props) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
   const router = useRouter();
+
+  const pageCount = Math.ceil(totalCount / pageSize);
 
   const table = useReactTable({
     data,
@@ -94,7 +114,11 @@ const CustomReactTable = ({
     state: {
       sorting,
       globalFilter,
+      pagination,
     },
+    onPaginationChange: setPagination,
+    manualPagination: true,
+    pageCount: pageCount,
     onSortingChange: setSorting,
     onGlobalFilterChange: setGlobalFilter,
     filterFns: {
@@ -112,7 +136,7 @@ const CustomReactTable = ({
     );
   }
 
-  if (!data.length) {
+  if (totalCount < 1 || !data.length) {
     return (
       <Center w="full" h="full" minH="60vh" bg="white" borderRadius={10}>
         <Box>
@@ -137,9 +161,9 @@ const CustomReactTable = ({
       <Flex w="full" align="center" justify="space-between" mb={[3, 4]}>
         <Flex align="center" gap={2}>
           <Text color="primary" fontSize={34} fontWeight="700">
-            {data.length}
+            {totalCount}
           </Text>
-          <Text>{data.length === 1 ? singular : plural}</Text>
+          <Text>{totalCount === 1 ? singular : plural}</Text>
         </Flex>
 
         <Flex align="center" gap={1.5}>
@@ -161,53 +185,118 @@ const CustomReactTable = ({
               <Spinner size="xl" />
             </Center>
           ) : (
-            <Table fontFamily="kanit" variant="unstyled" position="relative">
-              <Thead>
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <Tr key={headerGroup.id} borderBottom="2px solid #3E3E3E">
-                    {headerGroup.headers.map((header) => (
-                      <Th
-                        key={header.id}
-                        color="blackFour"
-                        fontSize={15}
-                        textTransform="capitalize"
-                        py={[4]}
-                        fontFamily="kanit"
-                      >
-                        {header.isPlaceholder ? null : (
-                          <Box
-                            {...{
-                              className: header.column.getCanSort()
-                                ? "cursor-pointer select-none"
-                                : "",
-                              onClick: header.column.getToggleSortingHandler(),
-                            }}
-                          >
-                            {flexRender(header.column.columnDef.header, header.getContext())}
-                            {{
-                              asc: " 🔼",
-                              desc: " 🔽",
-                            }[header.column.getIsSorted() as string] ?? null}
-                          </Box>
-                        )}
-                      </Th>
-                    ))}
-                  </Tr>
-                ))}
-              </Thead>
+            <>
+              <Table fontFamily="kanit" variant="unstyled" position="relative">
+                <Thead>
+                  {table.getHeaderGroups().map((headerGroup) => (
+                    <Tr key={headerGroup.id} borderBottom="2px solid #3E3E3E">
+                      {headerGroup.headers.map((header) => (
+                        <Th
+                          key={header.id}
+                          color="blackFour"
+                          fontSize={15}
+                          textTransform="capitalize"
+                          py={[4]}
+                          fontFamily="kanit"
+                        >
+                          {header.isPlaceholder ? null : (
+                            <Box
+                              {...{
+                                className: header.column.getCanSort()
+                                  ? "cursor-pointer select-none"
+                                  : "",
+                                onClick: header.column.getToggleSortingHandler(),
+                              }}
+                            >
+                              {flexRender(header.column.columnDef.header, header.getContext())}
+                              {{
+                                asc: " 🔼",
+                                desc: " 🔽",
+                              }[header.column.getIsSorted() as string] ?? null}
+                            </Box>
+                          )}
+                        </Th>
+                      ))}
+                    </Tr>
+                  ))}
+                </Thead>
 
-              <Tbody>
-                {table.getRowModel().rows.map((row) => (
-                  <Tr key={row.id} bg="#fbfbfb">
-                    {row.getVisibleCells().map((cell) => (
-                      <Td key={cell.id} color="blackFour" fontSize={15} fontFamily="kanit">
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </Td>
+                <Tbody>
+                  {table.getRowModel().rows.map((row) => (
+                    <Tr key={row.id} bg="#fbfbfb">
+                      {row.getVisibleCells().map((cell) => (
+                        <Td key={cell.id} color="blackFour" fontSize={15} fontFamily="kanit">
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </Td>
+                      ))}
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+              <Flex
+                w="full"
+                px={[4, 5]}
+                py={[4]}
+                bg="#fbfbfb"
+                align="center"
+                justifyContent="space-between"
+                // direction={["column", "row"]}
+                direction={["column"]}
+              >
+                <Flex gap={2}>
+                  <Text color="blackFour" fontSize={14}>
+                    Rows per page
+                  </Text>
+                  <select
+                    value={table.getState().pagination.pageSize}
+                    onChange={(e) => {
+                      table.setPageSize(Number(e.target.value));
+                    }}
+                  >
+                    {[1, 2, 3, 4].map((pageSize) => (
+                      <option key={pageSize} value={pageSize}>
+                        {pageSize}
+                      </option>
                     ))}
-                  </Tr>
-                ))}
-              </Tbody>
-            </Table>
+                  </select>
+                  <Text fontSize={14}>
+                    showing {table.getState().pagination.pageIndex + 1} to {table.getPageCount()} of{" "}
+                    {totalCount} entries
+                  </Text>
+                </Flex>
+
+                <Flex align="center">
+                  <Button
+                    color="blue"
+                    onClick={() => table.previousPage()}
+                    disabled={!table.getCanPreviousPage()}
+                  >
+                    Previous
+                  </Button>
+                  {Array.from(Array(Number(table.getPageCount()) + 1).keys())
+                    .slice(1)
+                    .map((i) => (
+                      <Text
+                        key={i}
+                        border={i === pageIndex + 1 ? "2px solid red" : "1px solid black"}
+                        px="1.5"
+                        fontSize={14}
+                        onClick={() => table.setPageIndex(i - 1)}
+                        cursor="pointer"
+                      >
+                        {i}
+                      </Text>
+                    ))}
+                  <Button
+                    color="blue"
+                    onClick={() => table.nextPage()}
+                    disabled={!table.getCanNextPage()}
+                  >
+                    Next
+                  </Button>
+                </Flex>
+              </Flex>
+            </>
           )}
         </Box>
       </Box>
