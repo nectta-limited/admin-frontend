@@ -33,6 +33,11 @@ export interface IGetDriversResponse {
   };
 }
 
+export interface IGetSingleDriverResponse {
+  status: boolean;
+  data: IDriver;
+}
+
 export interface IGetDriversRequestParams {
   page?: number;
   limit?: number;

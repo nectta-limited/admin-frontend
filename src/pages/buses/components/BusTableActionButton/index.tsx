@@ -1,5 +1,6 @@
 import { TriangleDownIcon } from "@chakra-ui/icons";
 import { Button, Menu, MenuButton, MenuItem, MenuList, Text } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 
 interface Props {
@@ -11,6 +12,7 @@ interface Props {
 
 const BusTableActionButton = ({ deactivateAction, deleteAction, id, isActive }: Props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const router = useRouter();
 
   const openMenu = () => {
     setIsMenuOpen(true);
@@ -59,7 +61,7 @@ const BusTableActionButton = ({ deactivateAction, deleteAction, id, isActive }: 
           bg="transparent"
           className="appHoverTwo"
           justifyContent="center"
-          // onClick={() => router.push("/dashboard/change-password")}
+          onClick={() => router.push(`/buses/edit/${id}`)}
         >
           <Text>Edit bus info</Text>
         </MenuItem>

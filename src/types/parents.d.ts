@@ -42,6 +42,11 @@ export interface IGetParentsResponse {
   };
 }
 
+export interface IGetSingleParentResponse {
+  status: boolean;
+  data: IParent;
+}
+
 export interface IGetParentsRequestParams {
   page?: number;
   limit?: number;

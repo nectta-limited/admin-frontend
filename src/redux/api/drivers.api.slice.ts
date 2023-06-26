@@ -2,6 +2,7 @@ import {
   ICreateDriverRequest,
   IGetDriversRequestParams,
   IGetDriversResponse,
+  IGetSingleDriverResponse,
   ISearchDriversRequestParams,
   IUpdateDriverRequest,
 } from "@/types/drivers";
@@ -28,6 +29,12 @@ export const driversApiSlice = necttaAdminApi.injectEndpoints({
     getDrivers: builder.query<IGetDriversResponse, IGetDriversRequestParams>({
       query: ({ page = 1, limit }) => ({
         url: `driver?page=${page}&limit=${limit}`,
+      }),
+      providesTags: ["Drivers"],
+    }),
+    getSingleDriver: builder.query<IGetSingleDriverResponse, number>({
+      query: (id) => ({
+        url: `driver/${id}`,
       }),
       providesTags: ["Drivers"],
     }),
@@ -70,4 +77,5 @@ export const {
   useDeactivateDriverMutation,
   useUpdateDriverMutation,
   useSearchDriversQuery,
+  useGetSingleDriverQuery,
 } = driversApiSlice;

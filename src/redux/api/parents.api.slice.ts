@@ -2,6 +2,7 @@ import {
   ICreateParentRequest,
   IGetParentsRequestParams,
   IGetParentsResponse,
+  IGetSingleParentResponse,
   ISearchParentsRequestParams,
   IUpdateParentRequest,
 } from "@/types/parents";
@@ -20,7 +21,7 @@ export const parentsApiSlice = necttaAdminApi.injectEndpoints({
     updateParent: builder.mutation<unknown, IUpdateParentRequest>({
       query: (data) => ({
         url: `parent/${data.id}`,
-        method: "PUT",
+        method: "PATCH",
         body: data.body,
       }),
       invalidatesTags: ["Parents", "Profile"],
@@ -28,6 +29,12 @@ export const parentsApiSlice = necttaAdminApi.injectEndpoints({
     getParents: builder.query<IGetParentsResponse, IGetParentsRequestParams>({
       query: ({ page = 1, limit }) => ({
         url: `parent?page=${page}&limit=${limit}`,
+      }),
+      providesTags: ["Parents"],
+    }),
+    getSingleParent: builder.query<IGetSingleParentResponse, number>({
+      query: (id) => ({
+        url: `parent/${id}`,
       }),
       providesTags: ["Parents"],
     }),
@@ -54,4 +61,5 @@ export const {
   useDeleteParentMutation,
   useUpdateParentMutation,
   useSearchParentsQuery,
+  useGetSingleParentQuery,
 } = parentsApiSlice;

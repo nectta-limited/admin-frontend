@@ -31,6 +31,11 @@ export interface IGetBusesResponse {
   };
 }
 
+export interface IGetSingleBusResponse {
+  status: boolean;
+  data: IBus;
+}
+
 export interface IGetBusesRequestParams {
   page?: number;
   limit?: number;

@@ -1,5 +1,6 @@
 import { TriangleDownIcon } from "@chakra-ui/icons";
 import { Button, Menu, MenuButton, MenuItem, MenuList, Text } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 
 interface Props {
@@ -9,6 +10,7 @@ interface Props {
 
 const ParentTableActionButton = ({ deleteAction, id }: Props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const router = useRouter();
 
   const openMenu = () => {
     setIsMenuOpen(true);
@@ -55,7 +57,7 @@ const ParentTableActionButton = ({ deleteAction, id }: Props) => {
           bg="transparent"
           className="appHoverTwo"
           justifyContent="center"
-          // onClick={() => router.push("/dashboard/change-password")}
+          onClick={() => router.push(`/parents/edit/${id}`)}
         >
           <Text>Edit parent info</Text>
         </MenuItem>
