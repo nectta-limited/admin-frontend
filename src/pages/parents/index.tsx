@@ -47,21 +47,12 @@ const ParentsPage: NextPage = () => {
     },
     { skip: !isSearch || !searchValue }
   );
-  const {
-    isOpen: isOpenDeactivate,
-    onClose: onCloseDeactivate,
-    onOpen: onOpenDeactivate,
-  } = useDisclosure();
+
   const { isOpen: isOpenDelete, onClose: onCloseDelete, onOpen: onOpenDelete } = useDisclosure();
 
   const handleOpenDeleteModal = (id: number) => {
     setSelectedId(id);
     onOpenDelete();
-  };
-
-  const handleOpenDeactivateModal = (id: number) => {
-    setSelectedId(id);
-    onOpenDeactivate();
   };
 
   const pagination = useMemo(
@@ -75,7 +66,7 @@ const ParentsPage: NextPage = () => {
   const columns = [
     columnHelper.accessor((row) => row.id, {
       id: "id",
-      cell: (info) => <>{info.getValue()}</>,
+      cell: (info) => <>{info.row.index + 1}</>,
       header: () => <>#</>,
     }),
     columnHelper.accessor((row) => row.createdAt, {

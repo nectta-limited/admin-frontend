@@ -77,7 +77,7 @@ const BusesPage: NextPage = () => {
   const columns = [
     columnHelper.accessor((row) => row.id, {
       id: "id",
-      cell: (info) => <>{info.getValue()}</>,
+      cell: (info) => <>{info.row.index + 1}</>,
       header: () => <>#</>,
     }),
     columnHelper.accessor((row) => row.busNumber, {
