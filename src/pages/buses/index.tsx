@@ -11,7 +11,7 @@ import { Box, Flex, Heading, useDisclosure } from "@chakra-ui/react";
 import { PaginationState, createColumnHelper } from "@tanstack/react-table";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 
 const columnHelper = createColumnHelper<IBus>();
 
@@ -19,7 +19,7 @@ const BusesPage: NextPage = () => {
   const router = useRouter();
   const [selectedId, setSelectedId] = useState<number>();
   const [isBusActive, setIsBusActive] = useState<boolean>();
-  const [{ pageIndex, pageSize }, setPagination] = React.useState<PaginationState>({
+  const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 1,
   });
@@ -50,7 +50,7 @@ const BusesPage: NextPage = () => {
     onOpenDeactivate();
   };
 
-  const pagination = React.useMemo(
+  const pagination = useMemo(
     () => ({
       pageIndex,
       pageSize,

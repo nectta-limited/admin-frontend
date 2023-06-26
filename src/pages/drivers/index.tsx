@@ -4,10 +4,10 @@ import StatusText from "@/components/StatusText";
 import { useGetDriversQuery } from "@/redux/api/drivers.api.slice";
 import { IDriver } from "@/types/drivers";
 import { Box, Flex, Heading, useDisclosure } from "@chakra-ui/react";
-import { createColumnHelper } from "@tanstack/react-table";
+import { PaginationState, createColumnHelper } from "@tanstack/react-table";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import DriverTableActionButton from "./components/DriverTableActionButton";
 import CustomReactTable from "@/components/CustomReactTable";
 import dayjs from "dayjs";
@@ -18,9 +18,21 @@ const columnHelper = createColumnHelper<IDriver>();
 
 const DriversPage: NextPage = () => {
   const router = useRouter();
-  const { data, isLoading } = useGetDriversQuery({});
   const [selectedId, setSelectedId] = useState<number>();
   const [isDriverActive, setIsDriverActive] = useState<boolean>();
+  const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 1,
+  });
+  const { data, isLoading, isFetching } = useGetDriversQuery({
+    page: pageIndex + 1,
+    limit: pageSize,
+  });
+  const {
+    data: totalData,
+    isLoading: isLoadingTotal,
+    isFetching: isFetchingTotal,
+  } = useGetDriversQuery({});
   const {
     isOpen: isOpenDeactivate,
     onClose: onCloseDeactivate,
@@ -38,6 +50,14 @@ const DriversPage: NextPage = () => {
     setIsDriverActive(isActive);
     onOpenDeactivate();
   };
+
+  const pagination = useMemo(
+    () => ({
+      pageIndex,
+      pageSize,
+    }),
+    [pageIndex, pageSize]
+  );
 
   const columns = [
     columnHelper.accessor((row) => row.id, {
@@ -127,6 +147,11 @@ const DriversPage: NextPage = () => {
           plural="Drivers"
           singular="Driver"
           isLoading={isLoading}
+          totalCount={totalData?.data?.length ?? 0}
+          pageIndex={pageIndex}
+          pageSize={pageSize}
+          setPagination={setPagination}
+          pagination={pagination}
         />
       </Box>
     </AuthLayout>

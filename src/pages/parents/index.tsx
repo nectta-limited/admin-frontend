@@ -5,11 +5,11 @@ import StatusText from "@/components/StatusText";
 import { useGetParentsQuery } from "@/redux/api/parents.api.slice";
 import { IParent } from "@/types/parents";
 import { Box, Flex, Heading, useDisclosure } from "@chakra-ui/react";
-import { createColumnHelper } from "@tanstack/react-table";
+import { PaginationState, createColumnHelper } from "@tanstack/react-table";
 import dayjs from "dayjs";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import ParentTableActionButton from "./components/ParentTableActionButton";
 import DeleteModal from "@/components/DeleteModal";
 
@@ -17,8 +17,20 @@ const columnHelper = createColumnHelper<IParent>();
 
 const ParentsPage: NextPage = () => {
   const router = useRouter();
-  const { data, isLoading } = useGetParentsQuery({});
   const [selectedId, setSelectedId] = useState<number>();
+  const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 1,
+  });
+  const { data, isLoading, isFetching } = useGetParentsQuery({
+    page: pageIndex + 1,
+    limit: pageSize,
+  });
+  const {
+    data: totalData,
+    isLoading: isLoadingTotal,
+    isFetching: isFetchingTotal,
+  } = useGetParentsQuery({});
   const {
     isOpen: isOpenDeactivate,
     onClose: onCloseDeactivate,
@@ -35,6 +47,14 @@ const ParentsPage: NextPage = () => {
     setSelectedId(id);
     onOpenDeactivate();
   };
+
+  const pagination = useMemo(
+    () => ({
+      pageIndex,
+      pageSize,
+    }),
+    [pageIndex, pageSize]
+  );
 
   const columns = [
     columnHelper.accessor((row) => row.id, {
@@ -112,6 +132,11 @@ const ParentsPage: NextPage = () => {
           plural="Parents"
           singular="Parent"
           isLoading={isLoading}
+          totalCount={totalData?.data?.length ?? 0}
+          pageIndex={pageIndex}
+          pageSize={pageSize}
+          setPagination={setPagination}
+          pagination={pagination}
         />
       </Box>
     </AuthLayout>

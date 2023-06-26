@@ -63,6 +63,28 @@ type Props = {
   // setSelectedRows?: (value: Record<string, boolean>) => void;
 };
 
+const createPaginationArray = (value: number) => {
+  let pageCountStart = 1;
+  let pageCountEnd = 5;
+  let res = [];
+
+  if (value <= 5) {
+    pageCountStart = 1;
+    pageCountEnd = value < 5 ? value : 5;
+  } else if (value % 5 === 0 && value !== 5) {
+    pageCountStart = value - 4;
+    pageCountEnd = value;
+  } else {
+    pageCountStart = Math.floor(value / 5) * 5 + 1;
+    pageCountEnd = value;
+  }
+
+  for (let i = pageCountStart; i <= pageCountEnd; i++) {
+    res.push(i);
+  }
+  return res;
+};
+
 declare module "@tanstack/table-core" {
   interface FilterFns {
     fuzzy: FilterFn<unknown>;
@@ -240,8 +262,8 @@ const CustomReactTable = ({
                 bg="#fbfbfb"
                 align="center"
                 justifyContent="space-between"
-                // direction={["column", "row"]}
-                direction={["column"]}
+                direction={["column", "row"]}
+                // direction={["column"]}
               >
                 <Flex gap={2}>
                   <Text color="blackFour" fontSize={14}>
@@ -252,6 +274,7 @@ const CustomReactTable = ({
                     onChange={(e) => {
                       table.setPageSize(Number(e.target.value));
                     }}
+                    className="tableSelect"
                   >
                     {[1, 2, 3, 4].map((pageSize) => (
                       <option key={pageSize} value={pageSize}>
@@ -259,7 +282,7 @@ const CustomReactTable = ({
                       </option>
                     ))}
                   </select>
-                  <Text fontSize={14}>
+                  <Text fontSize={14} color="blackFour">
                     showing {table.getState().pagination.pageIndex + 1} to {table.getPageCount()} of{" "}
                     {totalCount} entries
                   </Text>
@@ -267,30 +290,50 @@ const CustomReactTable = ({
 
                 <Flex align="center">
                   <Button
-                    color="blue"
+                    color="black"
                     onClick={() => table.previousPage()}
                     disabled={!table.getCanPreviousPage()}
+                    fontFamily="kanit"
+                    fontSize={["0.875rem", "1rem"]}
+                    fontWeight="500"
+                    _hover={{
+                      opacity: "0.7",
+                    }}
+                    _disabled={{
+                      opacity: 0.4,
+                    }}
                   >
                     Previous
                   </Button>
-                  {Array.from(Array(Number(table.getPageCount()) + 1).keys())
-                    .slice(1)
-                    .map((i) => (
-                      <Text
-                        key={i}
-                        border={i === pageIndex + 1 ? "2px solid red" : "1px solid black"}
-                        px="1.5"
-                        fontSize={14}
-                        onClick={() => table.setPageIndex(i - 1)}
-                        cursor="pointer"
-                      >
-                        {i}
-                      </Text>
-                    ))}
+
+                  {createPaginationArray(table.getPageCount()).map((i) => (
+                    <Text
+                      key={i}
+                      border={i === pageIndex + 1 ? "1px solid #2F5CAF" : "1px solid transparent"}
+                      borderRadius={3}
+                      px="2.5"
+                      py="0.5"
+                      fontSize={14}
+                      onClick={() => table.setPageIndex(i - 1)}
+                      cursor="pointer"
+                    >
+                      {i}
+                    </Text>
+                  ))}
+
                   <Button
-                    color="blue"
+                    color="black"
                     onClick={() => table.nextPage()}
                     disabled={!table.getCanNextPage()}
+                    fontFamily="kanit"
+                    fontSize={["0.875rem", "1rem"]}
+                    fontWeight="500"
+                    _hover={{
+                      opacity: "0.7",
+                    }}
+                    _disabled={{
+                      opacity: 0.4,
+                    }}
                   >
                     Next
                   </Button>
