@@ -35,3 +35,7 @@ export interface IGetBusesRequestParams {
   page?: number;
   limit?: number;
 }
+
+export interface ISearchBusesRequestParams extends IGetBusesRequestParams {
+  query?: string;
+}

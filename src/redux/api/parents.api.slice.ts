@@ -2,6 +2,7 @@ import {
   ICreateParentRequest,
   IGetParentsRequestParams,
   IGetParentsResponse,
+  ISearchParentsRequestParams,
   IUpdateParentRequest,
 } from "@/types/parents";
 import { necttaAdminApi } from "../api.slice";
@@ -30,6 +31,12 @@ export const parentsApiSlice = necttaAdminApi.injectEndpoints({
       }),
       providesTags: ["Parents"],
     }),
+    searchParents: builder.query<IGetParentsResponse, ISearchParentsRequestParams>({
+      query: ({ page = 1, limit, query }) => ({
+        url: `driver/search?page=${page}&limit=${limit}&query=${query}`,
+      }),
+      providesTags: ["Parents"],
+    }),
     deleteParent: builder.mutation<unknown, number>({
       query: (id) => ({
         url: `parent/${id}`,
@@ -46,4 +53,5 @@ export const {
   useGetParentsQuery,
   useDeleteParentMutation,
   useUpdateParentMutation,
+  useSearchParentsQuery,
 } = parentsApiSlice;

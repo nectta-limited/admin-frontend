@@ -37,3 +37,7 @@ export interface IGetDriversRequestParams {
   page?: number;
   limit?: number;
 }
+
+export interface ISearchDriversRequestParams extends IGetDriversRequestParams {
+  query?: string;
+}

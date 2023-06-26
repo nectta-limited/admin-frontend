@@ -180,7 +180,7 @@ const CustomReactTable = ({
 
   return (
     <>
-      <Flex w="full" align="center" justify="space-between" mb={[3, 4]}>
+      {/* <Flex w="full" align="center" justify="space-between" mb={[3, 4]}>
         <Flex align="center" gap={2}>
           <Text color="primary" fontSize={34} fontWeight="700">
             {totalCount}
@@ -198,7 +198,7 @@ const CustomReactTable = ({
             placeholder="Search all columns..."
           />
         </Flex>
-      </Flex>
+      </Flex> */}
 
       <Box mt={title ? [6, 8, 10] : search ? 3 : 0} maxW="full" w="full">
         <Box className={styles.container} overflowX="scroll" maxW="full" w="full">

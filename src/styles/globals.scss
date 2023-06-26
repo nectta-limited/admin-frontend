@@ -49,8 +49,23 @@ a {
   font-weight: 600;
 }
 
+.tableInput {
+  border: 1px solid #e0e0e0;
+  border-radius: 3px;
+  background-color: transparent;
+  color: #404040;
+  font-size: 0.85rem;
+  font-family: "Kanit", sans-serif;
+  padding: 0.3rem 0.5rem;
+}
+
 .tableSelect:focus {
   outline: none;
+}
+
+.tableInput:focus {
+  outline: 1px solid black;
+  border: 1px solid transparent;
 }
 
 .cursor-pointer {

@@ -3,6 +3,7 @@ import {
   ICreateBusRequest,
   IGetBusesRequestParams,
   IGetBusesResponse,
+  ISearchBusesRequestParams,
   IUpdateBusRequest,
 } from "@/types/buses";
 
@@ -27,6 +28,12 @@ export const busesApiSlice = necttaAdminApi.injectEndpoints({
     getBuses: builder.query<IGetBusesResponse, IGetBusesRequestParams>({
       query: ({ page = 1, limit }) => ({
         url: limit ? `bus?page=${page}&limit=${limit}` : `bus?page=${page}`,
+      }),
+      providesTags: ["Buses"],
+    }),
+    searchBuses: builder.query<IGetBusesResponse, ISearchBusesRequestParams>({
+      query: ({ page = 1, limit, query }) => ({
+        url: `bus/search?page=${page}&limit=${limit}&query=${query}`,
       }),
       providesTags: ["Buses"],
     }),
@@ -62,4 +69,5 @@ export const {
   useDeactivateBusMutation,
   useActivateBusMutation,
   useUpdateBusMutation,
+  useSearchBusesQuery,
 } = busesApiSlice;

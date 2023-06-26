@@ -46,3 +46,7 @@ export interface IGetParentsRequestParams {
   page?: number;
   limit?: number;
 }
+
+export interface ISearchParentsRequestParams extends IGetParentsRequestParams {
+  query?: string;
+}
